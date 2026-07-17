@@ -1,10 +1,10 @@
 # ShipTrack
 
-![CI](https://github.com/YOUR_GITHUB_USERNAME/john-doe-shiptrack/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/Sharazsony/sharaz-soni-shiptrack/actions/workflows/ci.yml/badge.svg)
 
 ShipTrack — a FastAPI service for tracking application deployments across environments, with a one-click rollback action.
 
-> **Before you push this repo:** rename the repo to `<firstname>-<lastname>-shiptrack`, replace `YOUR_GITHUB_USERNAME` in the badge URL above with your GitHub username, and set the `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN` repo secrets (see below) before the `docker` CI job will succeed.
+> **Before your first CI run:** set the `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN` repo secrets on GitHub (see below) — the `docker` job needs them to log in and push.
 
 ## Prerequisites
 
@@ -16,8 +16,8 @@ Tested with:
 ## Quickstart
 
 ```bash
-git clone https://github.com/<user>/<firstname>-<lastname>-shiptrack.git
-cd <firstname>-<lastname>-shiptrack
+git clone https://github.com/Sharazsony/sharaz-soni-shiptrack.git
+cd sharaz-soni-shiptrack
 cp .env.example .env          # works as-is: it ships API_KEY=local-dev-key
 docker compose up --build -d
 curl http://localhost:8000/health
