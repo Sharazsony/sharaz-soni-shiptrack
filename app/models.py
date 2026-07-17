@@ -4,21 +4,20 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, Index, String
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy import func
+from sqlalchemy import ForeignKey, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
-#class
-class Environment(str, enum.Enum):
+
+class Environment(str, enum.Enum):  # noqa: UP042
     dev = "dev"
     staging = "staging"
     prod = "prod"
 
 
-class DeploymentStatus(str, enum.Enum):
+class DeploymentStatus(str, enum.Enum):  # noqa: UP042
     pending = "pending"
     succeeded = "succeeded"
     failed = "failed"
@@ -35,7 +34,7 @@ class Application(Base):
         server_default=func.now(), nullable=False
     )
 
-    deployments: Mapped[list["Deployment"]] = relationship(
+    deployments: Mapped[list[Deployment]] = relationship(
         back_populates="application", cascade="all, delete-orphan"
     )
 
@@ -80,4 +79,4 @@ class Deployment(Base):
         server_default=func.now(), nullable=False
     )
 
-    application: Mapped["Application"] = relationship(back_populates="deployments")
+    application: Mapped[Application] = relationship(back_populates="deployments")

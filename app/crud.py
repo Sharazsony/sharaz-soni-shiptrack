@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -21,7 +21,7 @@ def write_audit_line(action: str, fields: dict[str, object]) -> None:
     """Append a single pipe-delimited audit line. Never logs secrets."""
     path = settings.audit_log_path
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    ts = datetime.now(timezone.utc).isoformat()
+    ts = datetime.now(UTC).isoformat()
     kv = " ".join(f"{k}={v}" for k, v in fields.items())
     line = f"{ts} | {action} | {kv}\n"
     with open(path, "a", encoding="utf-8") as f:
@@ -74,7 +74,7 @@ def create_deployment(
         version=version,
         environment=environment,
         status=status,
-        deployed_at=datetime.now(timezone.utc),
+        deployed_at=datetime.now(UTC),
     )
     db.add(row)
     db.commit()
@@ -131,7 +131,7 @@ def perform_rollback(db: Session, target: Deployment) -> Deployment:
         environment=target.environment,
         version=previous.version,
         status=DeploymentStatus.succeeded,
-        deployed_at=datetime.now(timezone.utc),
+        deployed_at=datetime.now(UTC),
     )
     db.add(new_row)
     db.commit()

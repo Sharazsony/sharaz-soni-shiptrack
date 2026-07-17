@@ -1,7 +1,11 @@
 from fastapi.testclient import TestClient
 
 
-def _make_application(client: TestClient, auth_headers: dict[str, str], name: str = "checkout-api") -> int:
+def _make_application(
+    client: TestClient,
+    auth_headers: dict[str, str],
+    name: str = "checkout-api",
+) -> int:
     resp = client.post(
         "/applications",
         json={"name": name, "repo_url": "https://github.com/acme/checkout-api"},

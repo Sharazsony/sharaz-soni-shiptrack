@@ -19,9 +19,9 @@ os.environ.setdefault(
     "postgresql+psycopg://appuser:localdevpassword@localhost:5432/shiptrack",
 )
 
+from app.config import settings  # noqa: E402
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.config import settings  # noqa: E402
 
 TEST_DATABASE_URL = os.environ["DATABASE_URL"]
 
