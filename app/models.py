@@ -11,7 +11,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
-
+#class
 class Environment(str, enum.Enum):
     dev = "dev"
     staging = "staging"
