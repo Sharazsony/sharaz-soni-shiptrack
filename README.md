@@ -13,6 +13,18 @@ Tested with:
 - Docker Compose v2 (the `docker compose` subcommand, not the standalone `docker-compose` binary)
 - Git 2.4x
 
+## GitHub Actions secrets
+
+The CI pipeline expects 5 repository secrets in GitHub. Add them at GitHub → Settings → Secrets and variables → Actions → New repository secret:
+
+- `CI_POSTGRES_USER`: PostgreSQL username used by the CI test service
+- `CI_POSTGRES_PASSWORD`: PostgreSQL password for that CI user
+- `CI_POSTGRES_DB`: Database name used during CI tests
+- `DOCKERHUB_USERNAME`: Your Docker Hub username for the image-publish job
+- `DOCKERHUB_TOKEN`: A Docker Hub access token (recommended) or password
+
+If you want the full workflow to run end-to-end, add all 5. If you only want to test the lint/test job and not publish Docker images, the Docker Hub secrets are optional, but the workflow still references them in the `docker` job.
+
 ## Quickstart
 
 ```bash

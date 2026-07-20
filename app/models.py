@@ -4,7 +4,7 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 
-from sqlalchemy import Enum as SAEnum
+from sqlalchemy import DateTime, Enum as SAEnum
 from sqlalchemy import ForeignKey, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -31,7 +31,9 @@ class Application(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     repo_url: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        server_default=func.now(), nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
 
     deployments: Mapped[list[Deployment]] = relationship(
@@ -76,7 +78,9 @@ class Deployment(Base):
         server_default=DeploymentStatus.pending.value,
     )
     deployed_at: Mapped[datetime] = mapped_column(
-        server_default=func.now(), nullable=False
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
     )
 
     application: Mapped[Application] = relationship(back_populates="deployments")

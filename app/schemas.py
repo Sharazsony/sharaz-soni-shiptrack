@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, field_serializer
 
 from app.models import DeploymentStatus, Environment
 
@@ -49,6 +49,26 @@ class ApplicationOut(BaseModel):
     repo_url: str
     created_at: datetime
 
+    @field_serializer("created_at")
+    def serialize_created_at(self, value: datetime) -> str:
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc).isoformat()
+
+    @field_validator("created_at", mode="before")
+    @classmethod
+    def normalize_created_at(cls, value: datetime | str | None) -> datetime | None:
+        if isinstance(value, str):
+            parsed = datetime.fromisoformat(value)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed
+        if value is None:
+            return None
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value
+
 
 # ---------------------------------------------------------------------------
 # Deployments
@@ -89,6 +109,26 @@ class DeploymentOut(BaseModel):
     environment: Environment
     status: DeploymentStatus
     deployed_at: datetime
+
+    @field_serializer("deployed_at")
+    def serialize_deployed_at(self, value: datetime) -> str:
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc).isoformat()
+
+    @field_validator("deployed_at", mode="before")
+    @classmethod
+    def normalize_deployed_at(cls, value: datetime | str | None) -> datetime | None:
+        if isinstance(value, str):
+            parsed = datetime.fromisoformat(value)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed
+        if value is None:
+            return None
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value
 
 
 # ---------------------------------------------------------------------------
