@@ -14,19 +14,19 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: appuser
-          POSTGRES_PASSWORD: localdevpassword
-          POSTGRES_DB: shiptrack
+          POSTGRES_USER: ${{ secrets.CI_POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.CI_POSTGRES_DB }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U appuser -d shiptrack"
+          --health-cmd "pg_isready -U ${{ secrets.CI_POSTGRES_USER }} -d ${{ secrets.CI_POSTGRES_DB }}"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
 
     env:
-      DATABASE_URL: postgresql+psycopg://appuser:localdevpassword@localhost:5432/shiptrack
+      DATABASE_URL: postgresql+psycopg://${{ secrets.CI_POSTGRES_USER }}:${{ secrets.CI_POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.CI_POSTGRES_DB }}
       API_KEY: test-key
       AUDIT_LOG_PATH: /tmp/audit.log
 

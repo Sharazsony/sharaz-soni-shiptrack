@@ -14,16 +14,17 @@ from sqlalchemy.orm import Session, sessionmaker
 # AUDIT_LOG_PATH and API_KEY must be set before app.config is imported,
 # since Settings() is instantiated at import time.
 os.environ.setdefault("API_KEY", "test-key")
-os.environ.setdefault(
-    "DATABASE_URL",
-    "postgresql+psycopg://appuser:localdevpassword@localhost:5432/shiptrack",
-)
+os.environ.setdefault("POSTGRES_USER", "appuser")
+os.environ.setdefault("POSTGRES_PASSWORD", "localdevpassword")
+os.environ.setdefault("POSTGRES_HOST", "localhost")
+os.environ.setdefault("POSTGRES_PORT", "5432")
+os.environ.setdefault("POSTGRES_DB", "shiptrack")
 
 from app.config import settings  # noqa: E402
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 
-TEST_DATABASE_URL = os.environ["DATABASE_URL"]
+TEST_DATABASE_URL = settings.database_url
 
 engine = create_engine(TEST_DATABASE_URL, future=True)
 TestingSessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)

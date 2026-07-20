@@ -29,17 +29,21 @@ No manual table creation, no `docker exec`, no editing files required — tables
 
 ## Configuration (`.env`)
 
-Your `pydantic-settings` `Settings` class reads exactly these five variables — nothing else:
+Your `pydantic-settings` `Settings` class reads the split Postgres variables and the other app settings — nothing else:
 
 | Variable | Purpose | Example |
 |---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string used by SQLAlchemy | `postgresql+psycopg://appuser:localdevpassword@db:5432/shiptrack` |
+| `POSTGRES_USER` | PostgreSQL user name | `appuser` |
+| `POSTGRES_PASSWORD` | PostgreSQL password | `localdevpassword` |
+| `POSTGRES_HOST` | PostgreSQL host | `db` |
+| `POSTGRES_PORT` | PostgreSQL port | `5432` |
+| `POSTGRES_DB` | PostgreSQL database name | `shiptrack` |
 | `APP_ENV` | Environment label used in the startup log line | `local` |
 | `LOG_LEVEL` | Root log level | `INFO` |
 | `API_KEY` | Value the `X-API-Key` header must match on write endpoints | `local-dev-key` |
 | `AUDIT_LOG_PATH` | File the background task appends audit lines to | `/app/logs/audit.log` |
 
-> `POSTGRES_USER`, `POSTGRES_PASSWORD` and `POSTGRES_DB` also live in `.env.example`, but they are consumed by the `db` container only — your pydantic `Settings` class never reads them.
+> `DATABASE_URL` is derived at runtime from the split Postgres settings via `settings.database_url`, so it is not read as a separate environment variable.
 
 The app has a startup guard: if `API_KEY` is unset or empty, it refuses to boot rather than silently accepting unauthenticated writes.
 
