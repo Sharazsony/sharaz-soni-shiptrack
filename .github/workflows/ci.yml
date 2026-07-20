@@ -9,7 +9,6 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:16
@@ -17,10 +16,12 @@ jobs:
           POSTGRES_USER: ${{ secrets.CI_POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.CI_POSTGRES_DB }}
+          PGUSER: ${{ secrets.CI_POSTGRES_USER }}
+          PGDATABASE: ${{ secrets.CI_POSTGRES_DB }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U ${{ secrets.CI_POSTGRES_USER }} -d ${{ secrets.CI_POSTGRES_DB }}"
+          --health-cmd "pg_isready"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
